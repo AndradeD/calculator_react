@@ -1,24 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Resultado from './components/resultado';
+import Teclado from './components/teclado';
 
-function App() {
+function App () {
+  const [resultado, setResultado] = React.useState ('');
+
+  const onclick = (buttonClicked) => {
+    if (buttonClicked === 'C'){
+      backspace()
+    }
+    else if (buttonClicked === 'CE') {
+      reset()
+    }
+    else if (buttonClicked === '=') {
+      calculate()
+    }
+    else {
+      setResultado(resultado + buttonClicked)
+    }
+  } 
+  
+  const backspace = () => {
+    setResultado('')
+  }
+  
+  const reset = () => {
+    setResultado(resultado.slice(0,-1))
+  }
+  
+  const calculate = () => {
+    var checkResult = ''
+  
+    if (resultado.includes('--')){
+      checkResult = resultado.replace('--','+');
+    } else {
+      checkResult = resultado;
+    }
+  
+    setResultado((eval(checkResult) || "" ) + "");
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header />
+      <body>
+        <div>
+        <Resultado resultado={resultado} />
+        <Teclado onClick={onclick}/>
+        </div>
+      </body>
     </div>
   );
 }
